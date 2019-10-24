@@ -1,0 +1,378 @@
+#include<iostream>
+using namespace std;
+
+int ab[3][3];
+
+void getmatrix(int a[3][3])
+{
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            cin>>a[i][j];
+        }
+        cout<<endl;
+    }
+}
+
+void displaymatrix(int a[3][3])
+{ 
+for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            cout<<a[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+    
+void addMatrix(int a[3][3], int b[3][3], int c[3][3])
+{
+    for(int i=0; i<3; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            c[i][j]=a[i][j]+b[i][j];
+        }
+    }
+}
+
+void multiplyMatrix(int a[3][3], int b[3][3], int d[3][3])
+{
+    int sum1=0;
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            for(int k=0;k<3;k++)
+            {
+                sum1+=a[i][k]*b[k][i];
+            }
+            d[i][j]=sum1;
+        }
+    }
+}
+
+void transposeMatrix(int a[3][3], int temp[3][3])
+{
+    for(int i=0; i<3; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            temp[j][i]=a[i][j];
+        }
+    }
+}
+
+void scaleMatrix(int a[3][3])
+{
+    int k;
+    cout<<"Enter the number to scale a:";
+    cin>>k;
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            a[i][j]=k*a[i][j];
+        }
+    }
+}
+
+
+void vectorMatrix(int a[3][3], int e[1][3], int f[1][3])
+{
+    int sum1=0;
+    
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            sum1+=a[j][i]*e[0][j];
+        }
+        f[0][i]=sum1;
+    }
+    for(int i=0; i<1; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            cout<<f[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+void matrixVector(int a[3][3], int g[3][1], int h[3][1])
+{
+    int sum1=0;
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            sum1+=a[i][j]*g[0][j];
+        }
+        h[i][0]=sum1;
+    }
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<1;j++)
+        {
+            cout<<h[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+
+void cofactor(int b[3][3], int x, int m[2][2], int o)
+{
+    int p=0, q=0;
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            if(j!=x && i!=o)
+            {
+                m[p][q]=b[i][j];
+                q++;
+                if(q==2)
+                {
+                    p++;
+                    q=0;
+                }
+            }
+        }
+    }
+}
+
+int determinant(int b[3][3], int m[2][2])
+{
+    int y=0, sign=1;
+    for(int i=0;i<3;i++)
+    {
+        cofactor(b,i,m,0);
+        y=y+(sign*b[0][i]*((m[0][0]*m[1][1]) - (m[1][0]*m[0][1])));
+        sign=sign*(-1);
+    }
+    return y;
+}
+
+void inverse(int b[3][3], int z[3][3], int m[2][2])
+{
+    int sign=1;
+    int temp[3][3];
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            cofactor(b,j,m,i);
+            z[i][j]=sign*((m[0][0]*m[1][1])-(m[1][0]*m[0][1]));
+            sign=sign*(-1);
+        }
+    }
+    int x=determinant(b,m);
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            z[i][j]=z[i][j]/x;
+        }
+    }
+    transposeMatrix(z,temp);
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            cout<<temp[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            ab[i][j]=temp[i][j];
+        }
+    }
+}
+
+int symmetric(float a[3][3])
+{
+    int flag=1;
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            if(a[i][j]!=a[j][i])
+            {
+                flag=0;
+                break;
+            }
+        }
+    }
+    if(flag==0)
+    {
+        cout<<"matrix is not symmetric";
+    }
+    else
+    {
+        cout<<"matrix is symmetric";
+    }
+}
+
+int skewsymmetric(float a[3][3])
+{
+    int flag=1;
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            if(a[i][j]!=(-a[j][i]))
+                flag=0;
+                break;
+        }
+    }
+
+if(flag==0)
+{
+    cout<<"matrix is not skewsymmetric";
+}
+else
+{
+    cout<<"matrix is skewsymmetric";
+}
+}
+
+
+
+
+
+
+int main()
+{
+    
+    int a[3][3];
+    int b[3][3];
+    int c[3][3];
+    int d[3][3];
+    int temp[3][3];
+    int e[1][3]={1,2,3};
+    int f[1][3];
+    int g[3][1]={1,2,3};
+    int h[3][1];
+    int m[2][2];
+    int z[3][3];
+    int cd[3][3];
+    cout<<"enter matrix 1: "<<endl;
+    getmatrix(a);
+    cout<<endl<<"your matrix 1: "<<endl;
+    displaymatrix(a);
+    cout<<"enter matrix 2:"<<endl;
+    getmatrix(b);
+    cout<<endl<<"your matrix 2: "<<endl;
+    displaymatrix(b);
+    addMatrix(a,b,c);
+    
+    cout<<endl<<"your added matrix is: "<<endl;
+    displaymatrix(c);
+    cout<<"multiplied matrix is: "<<endl;
+    multiplyMatrix(b,a,d);
+    displaymatrix(d);
+    cout<<endl<<"transpose a: "<<endl;
+    transposeMatrix(a,temp);
+    displaymatrix(temp);
+    cout<<"matrix after scaling: "<<endl;
+    scaleMatrix(a);
+    displaymatrix(a);
+    cout<<"output of vector matrix"<<endl;
+    vectorMatrix(b,e,f);
+    cout<<"output of matrix vector"<<endl;
+    matrixVector(b,g,h);
+    cout<<"determinant of matrix b: "<<determinant(b,m)<<endl;
+    cout<<"inverse of matrix b is: "<<endl;
+    inverse(b,z,m);
+    multiplyMatrix(b,ab,cd);
+    cout<<endl;
+    cout<<"AA-I:"<<endl;
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            cout<<cd[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    int gh[3][3];
+    float ij[3][3];
+        transposeMatrix(b,temp);
+    
+        
+    addMatrix(b,temp,gh);
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            ij[i][j]=gh[i][j];
+        }
+    }
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            ij[i][j]/=2;
+        }
+    }
+    cout<<"skewsymmetric matrix is (A+a(bar))/2: "<<endl;
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            cout<<ij[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    symmetric(ij);
+    cout<<endl;
+    skewsymmetric(ij);
+    
+    ////////////////////////////////////////////////////////////////////////
+    
+    transposeMatrix(b,temp);
+     for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            temp[i][j]=temp[i][j]*(-1);
+        }
+    }
+    
+    
+    addMatrix(b,temp, gh);
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+                ij[i][j]=gh[i][j];
+        }
+    }
+    for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            ij[i][j]/=2;
+        }
+        
+    }
+        cout<<"skewsymmetric martix is (A-a(bar))/2: "<<endl;
+        for(int i=0; i<3;i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            cout<<ij[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    symmetric(ij);
+    cout<<endl;
+    skewsymmetric(ij);
+}
